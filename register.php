@@ -5,11 +5,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Insert user data into database
-    $query = "INSERT INTO users (username, password) VALUES ('$username', '$password')";
+    $hashed_pass=password_hash($password, PASSWORD_BCRYPT);
+
+
+    $query = "INSERT INTO users (username, password) VALUES ('$username', '$hashed_pass')";
     if (mysqli_query($conn, $query)) {
-        echo "<script>alert('Registration Completed, Now You Can Login')</script>";
-        header('Location: login.php');
+
+
+
+        echo "<script>
+ window.location.href='login.php';
+alert('Registration Completed, Now You Can Login')</script>";
+
     } else {
         echo "Error: " . mysqli_error($conn);
     }

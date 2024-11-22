@@ -1,21 +1,30 @@
 <?php
 session_start();
-require_once 'conn.php';
+include_once 'conn.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Fetch user from database
-    $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+
+
+    $query = "SELECT * FROM users WHERE username = '$username'";
     $result = mysqli_query($conn, $query);
 
     if ($result && mysqli_num_rows($result) > 0) {
-        $_SESSION['user_id'] = $username; // Store user in session
-        header("Location: dashboard.php");
+        $user = mysqli_fetch_array($result);
+        $hashed_password = $user['password'];
+
+        if(password_verify($password, $hashed_password)) {
+            echo "<script>alert('Login Successful');</script>";
+            $_SESSION['user_id'] = $username;
+            header("Location: dashboard.php");
         exit;
-    } else{
-        echo "<script>alert('Incorrect username or password')</script>";
+        }else {
+            echo "<script>alert('Invalid Password');</script>";
+        }
+    }else{
+        echo "<script>alert('Username Not Found')</script>";
     }
 }
 ?>

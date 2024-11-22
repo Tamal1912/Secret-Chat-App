@@ -5,12 +5,9 @@ include_once 'conn.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $message = $_POST['message'];
 
-    // Get IP Address
     $ip_address = $_SERVER['REMOTE_ADDR'];
 
-
-
-    $query = "INSERT INTO messages (message, ip_address, mac_address) VALUES ('$message', '$ip_address', '$mac_address')";
+    $query = "INSERT INTO messages (message, ip_address) VALUES ('$message', '$ip_address')";
     if (mysqli_query($conn, $query)) {
 
         header("Location: dashboard.php");
